@@ -51,6 +51,20 @@ function drawBackground() {
     drawDots();
 }
 
+function drawScore() {
+    let total = 0;
+    let correct = 0;
+    for (let dot of dots) {
+        total ++;
+        if (dot.correct) {
+            correct ++;
+        }
+    }
+
+    acc = correct / total;
+    text(correct.toString() + ' correct / ' + total.toString() + ' total dots = ' + acc, 200, 30) 
+}
+
 function drawSep(separator) {
     // Create a vector defining angle of seperator and another perpendicular to it
     var sepVec = p5.Vector.sub(separator[0], separator[1]).normalize();
@@ -88,16 +102,24 @@ function drawSep(separator) {
          separator[1].x + xOffset, separator[1].y + yOffset);
 }
 
+function computeDot() {
+
+    for (let dot of dots) {
+        dot.dot = (w[0] * dot.position.x) + (w[1] * dot.position.y) + w[2];
+
+        if ((dot.dot > 0 && dot.class) || (dot.dot <= 0 && !dot.class)) {
+            dot.correct = true;
+        } else {
+            dot.correct = false;
+        }
+    }
+}
+
 function drawDots() {
     
     for (let dot of dots) {
-        var dotProduct = (w[0] * dot.position.x) + (w[1] * dot.position.y) + w[2];
-        // Save the value
-        dot.dot = dotProduct;
-
-        
         // Draw the circles around the dots
-        if (dotProduct > 0) {
+        if (dot.dot > 0) {
             fill(255, 255, 255, 150);
             stroke(255, 255, 255, 150);
         } else {
@@ -112,7 +134,7 @@ function drawDots() {
 
         strokeWeight(1);
         noFill();
-        if ((dotProduct > 0 && dot.class) || (dotProduct <= 0 && !dot.class)) {
+        if (dot.correct) {
             circle(dot.uv.x + xOffset, dot.uv.y + yOffset - 5, 14);
         }
         
@@ -169,7 +191,6 @@ function getSyntheticData() {
 
 function setDots(data) {
     for (let d of data) {
-        console.log(d)
         d.position = createVector(d.position[0], d.position[1]);
         d.uv = createVector(d.uv[0], d.uv[1]);
     }
@@ -229,7 +250,10 @@ function keyPressed() {
             console.log('sep', separator[0].x, separator[0].y, separator[1].x, separator[1].y)
         }
 
-        drawBackground()
+        computeDot();
+        drawBackground();
+        drawScore();
+
     } else if (key == 'd') {
         debug = !debug;
         drawBackground()

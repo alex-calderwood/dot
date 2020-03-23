@@ -9,9 +9,40 @@
   </head>
 
   <style>
+  * {
+    text-align: center;
+  }
+  
   #control > div {
     background-color: red;
   }
+
+  /* input {
+    display: inline-block;
+  } */
+
+
+input[type=text] {
+    /* width: 22.0%; */
+    display: inline-block;
+    width: 200px;
+    height: 30px;
+    border: none;
+    border-bottom: 4px solid #dddddd;  
+    margin-left: 1%;
+    margin-right: 1%;
+    padding: 0px;
+}
+
+input[type=text]:focus {
+    border: none;
+    border-bottom: 4px solid #dddddd;  
+    box-shadow: none;
+    outline: none;
+    background-color: #dddddd;
+    transition: background-color .2s ease-out;
+}
+
   </style>
   <body>
 
